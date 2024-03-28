@@ -16,7 +16,8 @@ private:
     std::mt19937 gen;
     std::uniform_int_distribution<int> distribution;
 
-    void checkBodyCollision();
+    bool checkBodyCollision();
+    bool checkBorderCollision();
     void updateHead();
     void changeDirection();
     void drawBorders();
