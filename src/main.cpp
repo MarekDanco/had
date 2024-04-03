@@ -14,20 +14,20 @@ void setup()
 
 void loop()
 {
-    Serial.write("Type a number: "); // Type a number and press enter
-    auto msg = Serial.readString();
-    if (msg)
-    {
-        Serial.print(msg);
-    }
-    Serial.write("ping\n");
-    // Get user input from the keyboard
-    // Serial.write(msg);
+    Serial.write("ping");
+
+    String msg;
 
     Had had(4);
     while (true)
     {
+        msg = Serial.readString();
+        if (msg != "")
+        {
+            delay(400);
+            Serial.print(msg);
+        }
         had.drawBody();
-        delay(400);
+        // delay(400);
     }
 }
