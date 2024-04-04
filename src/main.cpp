@@ -1,8 +1,5 @@
 #include <Arduino.h>
 #include "heltec.h"
-#include <list>
-#include <iterator>
-#include <random>
 #include "had.h"
 
 void setup()
@@ -16,18 +13,29 @@ void loop()
 {
     Serial.write("ping");
 
-    String msg;
-
+    bool released = true;
     Had had(4);
     while (true)
     {
-        msg = Serial.readString();
-        if (msg != "")
-        {
-            delay(400);
-            Serial.print(msg);
-        }
         had.drawBody();
+        delay(500);
+
+        auto msg = Serial.read();
+        if (msg == -1)
+        {
+            continue;
+        }
+        Serial.print(msg);
+        if (released && msg == 'w')
+        {
+            released = false;
+            Serial.println("Pressed");
+        }
+        else if (msg == 'm')
+        {
+            released = true;
+            Serial.println("Released");
+        }
         // delay(400);
     }
 }
