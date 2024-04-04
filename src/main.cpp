@@ -2,6 +2,10 @@
 #include "heltec.h"
 #include "had.h"
 
+Had had(4);
+int incomingByte = 0; // for incoming serial data
+bool released = true;
+
 void setup()
 {
     Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
@@ -11,31 +15,22 @@ void setup()
 
 void loop()
 {
-    Serial.write("ping");
-
-    bool released = true;
-    Had had(4);
-    while (true)
+    // reply only when you receive data:
+    if (Serial.available() > 0)
     {
-        had.drawBody();
-        delay(500);
-
-        auto msg = Serial.read();
-        if (msg == -1)
-        {
-            continue;
-        }
-        Serial.print(msg);
-        if (released && msg == 'w')
+        // read the incoming byte:
+        incomingByte = Serial.read();
+        if (released && incomingByte == 119)
         {
             released = false;
             Serial.println("Pressed");
         }
-        else if (msg == 'm')
+        else if (!released && incomingByte == 109)
         {
             released = true;
             Serial.println("Released");
         }
-        // delay(400);
     }
+    had.drawBody();
+    delay(500);
 }
