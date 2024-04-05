@@ -19,11 +19,12 @@ private:
     bool checkBodyCollision();
     bool checkBorderCollision();
     void updateHead();
-    void changeDirection();
+    void randomDirection();
     void drawBorders();
 
 public:
     Had(int i);
 
+    void changeDirection(int key);
     void drawBody();
 };

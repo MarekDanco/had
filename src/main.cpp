@@ -4,7 +4,6 @@
 
 Had had(4);
 int incomingByte = 0; // for incoming serial data
-bool released = true;
 
 void setup()
 {
@@ -20,17 +19,11 @@ void loop()
     {
         // read the incoming byte:
         incomingByte = Serial.read();
-        if (released && incomingByte == 119)
-        {
-            released = false;
-            Serial.println("Pressed");
-        }
-        else if (!released && incomingByte == 109)
-        {
-            released = true;
-            Serial.println("Released");
-        }
+        Serial.print("Pressed ");
+        Serial.println(incomingByte, DEC);
+        had.changeDirection(incomingByte);
     }
+
     had.drawBody();
     delay(500);
 }

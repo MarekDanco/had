@@ -4,6 +4,8 @@
 #include <iterator>
 #include <random>
 #include "heltec.h"
+#include <set>
+#include <utility> // for std::pair
 
 bool Had::checkBodyCollision()
 {
@@ -40,7 +42,7 @@ void Had::updateHead()
     tail = body.back();
 }
 
-void Had::changeDirection()
+void Had::randomDirection()
 {
     int random_number = distribution(gen);
     std::pair<int, int> old_dir = direction;
@@ -96,6 +98,58 @@ Had::Had(int i) : width(i), gen(rd()), distribution(0, 5)
     tail = body.back();
 };
 
+void Had::changeDirection(int key)
+{
+    if (key == 121)
+    {
+        std::set<std::pair<int, int>> possibleDirs = {
+            {1, 0},
+            {-1, 0}};
+
+        if (possibleDirs.find(direction) != possibleDirs.end())
+        {
+            direction.first = 0;
+            direction.second = -1;
+        }
+    }
+    if (key == 106)
+    {
+        std::set<std::pair<int, int>> possibleDirs = {
+            {0, 1},
+            {0, -1}};
+
+        if (possibleDirs.find(direction) != possibleDirs.end())
+        {
+            direction.first = 1;
+            direction.second = 0;
+        }
+    }
+    if (key == 104)
+    {
+        std::set<std::pair<int, int>> possibleDirs = {
+            {1, 0},
+            {-1, 0}};
+
+        if (possibleDirs.find(direction) != possibleDirs.end())
+        {
+            direction.first = 0;
+            direction.second = 1;
+        }
+    }
+    if (key == 103)
+    {
+        std::set<std::pair<int, int>> possibleDirs = {
+            {0, 1},
+            {0, -1}};
+
+        if (possibleDirs.find(direction) != possibleDirs.end())
+        {
+            direction.first = -1;
+            direction.second = 0;
+        }
+    }
+}
+
 void Had::drawBody()
 {
     Heltec.display->clear();
@@ -105,6 +159,6 @@ void Had::drawBody()
         Heltec.display->drawRect(pair.first, pair.second, width, width);
     }
     Heltec.display->display();
-    changeDirection();
+    // randomDirection();
     updateHead();
 }
