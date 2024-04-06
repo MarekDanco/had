@@ -4,6 +4,7 @@
 
 Had had(4);
 int incomingByte = 0; // for incoming serial data
+bool over = false;
 
 void setup()
 {
@@ -14,16 +15,22 @@ void setup()
 
 void loop()
 {
-    // reply only when you receive data:
-    if (Serial.available() > 0)
+    if (!over)
     {
-        // read the incoming byte:
-        incomingByte = Serial.read();
-        Serial.print("Pressed ");
-        Serial.println(incomingByte, DEC);
-        had.changeDirection(incomingByte);
-    }
+        // reply only when you receive data:
+        if (Serial.available() > 0)
+        {
+            // read the incoming byte:
+            incomingByte = Serial.read();
+            Serial.print("Pressed ");
+            Serial.println(incomingByte, DEC);
+            had.changeDirection(incomingByte);
+        }
 
-    had.drawBody();
-    delay(500);
+        if (had.drawBody())
+        {
+            over = true;
+        }
+        delay(500);
+    }
 }

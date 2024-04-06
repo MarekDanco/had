@@ -21,10 +21,11 @@ private:
     void updateHead();
     void randomDirection();
     void drawBorders();
+    void GameOver();
 
 public:
     Had(int i);
 
     void changeDirection(int key);
-    void drawBody();
+    bool drawBody();
 };

@@ -87,6 +87,36 @@ void Had::drawBorders()
     Heltec.display->drawLine(DISPLAY_WIDTH - 3, DISPLAY_HEIGHT - 1, DISPLAY_WIDTH - 3, 0);
 }
 
+void Had::GameOver()
+{
+    int headx = head.first + width / 2;
+    int heady = head.second + width / 2;
+    for (int16_t i = 3; i < DISPLAY_WIDTH - 3; i += 4)
+    {
+        Heltec.display->drawLine(headx, heady, i, 0);
+        Heltec.display->display();
+        delay(30);
+    }
+    for (int16_t i = 0; i < DISPLAY_HEIGHT - 1; i += 4)
+    {
+        Heltec.display->drawLine(headx, heady, DISPLAY_WIDTH - 3, i);
+        Heltec.display->display();
+        delay(30);
+    }
+    for (int16_t i = 0; i < DISPLAY_WIDTH - 3; i += 4)
+    {
+        Heltec.display->drawLine(headx, heady, DISPLAY_WIDTH - 3 - i, DISPLAY_HEIGHT - 1);
+        Heltec.display->display();
+        delay(30);
+    }
+    for (int16_t i = 0; i < DISPLAY_HEIGHT - 1; i += 4)
+    {
+        Heltec.display->drawLine(headx, heady, 3, DISPLAY_HEIGHT - 1 - i);
+        Heltec.display->display();
+        delay(30);
+    }
+}
+
 Had::Had(int i) : width(i), gen(rd()), distribution(0, 5)
 {
     direction = std::make_pair(-1, 0);
@@ -150,7 +180,7 @@ void Had::changeDirection(int key)
     }
 }
 
-void Had::drawBody()
+bool Had::drawBody()
 {
     Heltec.display->clear();
     drawBorders();
@@ -160,5 +190,11 @@ void Had::drawBody()
     }
     Heltec.display->display();
     // randomDirection();
+    if (checkBodyCollision() || checkBorderCollision())
+    {
+        GameOver();
+        return true;
+    }
     updateHead();
+    return false;
 }
