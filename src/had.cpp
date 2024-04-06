@@ -103,13 +103,13 @@ void Had::GameOver()
         Heltec.display->display();
         delay(30);
     }
-    for (int16_t i = 0; i < DISPLAY_WIDTH - 3; i += 4)
+    for (int16_t i = 0; i < DISPLAY_WIDTH - 6; i += 4)
     {
         Heltec.display->drawLine(headx, heady, DISPLAY_WIDTH - 3 - i, DISPLAY_HEIGHT - 1);
         Heltec.display->display();
         delay(30);
     }
-    for (int16_t i = 0; i < DISPLAY_HEIGHT - 1; i += 4)
+    for (int16_t i = 0; i < DISPLAY_HEIGHT - 2; i += 4)
     {
         Heltec.display->drawLine(headx, heady, 3, DISPLAY_HEIGHT - 1 - i);
         Heltec.display->display();
