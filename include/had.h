@@ -14,12 +14,9 @@ private:
     int width;
     bool eaten;
 
-    std::random_device xRd;
-    std::mt19937 xGen;
+    std::random_device rd;
+    std::mt19937 gen;
     std::uniform_int_distribution<int> xDistribution;
-
-    std::random_device yRd;
-    std::mt19937 yGen;
     std::uniform_int_distribution<int> yDistribution;
 
     bool checkBodyCollision();

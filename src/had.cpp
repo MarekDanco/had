@@ -80,7 +80,7 @@ void Had::GameOver()
     }
 }
 
-Had::Had(int i) : width(i)
+Had::Had(int i) : width(i), gen(rd()), xDistribution(-DISPLAY_WIDTH / width, DISPLAY_WIDTH / width), yDistribution(-DISPLAY_HEIGHT / 4, DISPLAY_HEIGHT / 4)
 {
     direction = std::make_pair(-1, 0);
     for (int i = 0; i < 6; ++i)
@@ -147,16 +147,39 @@ void Had::changeDirection(int key)
 
 bool Had::spawnedInBody()
 {
+    for (const auto &pair : body)
+    {
+        if (pair == food)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Had::spawnedOutside()
 {
+    if (food.first < 3 || food.first > DISPLAY_WIDTH - 3)
+    {
+        return true;
+    }
+    if (food.second < 1 || food.second > DISPLAY_HEIGHT - 1)
+    {
+        return true;
+    }
+    return false;
 }
 
 void Had::spawnFood()
 {
-    int x_range = 128 / width;
-    int y_range = 96 / width;
+    food.first = DISPLAY_WIDTH / 2 + xDistribution(gen) * width;
+    food.second = DISPLAY_HEIGHT / 2 - width / 2 + yDistribution(gen) * width;
+
+    while (spawnedInBody() || spawnedOutside())
+    {
+        food.first = DISPLAY_WIDTH / 2 + xDistribution(gen);
+        food.second = DISPLAY_HEIGHT / 2 - width / 2 + yDistribution(gen);
+    }
 }
 
 bool Had::drawBody()
