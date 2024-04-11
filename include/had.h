@@ -14,11 +14,6 @@ private:
     int width;
     bool eaten;
 
-    std::random_device rd;
-    std::mt19937 gen;
-    std::uniform_int_distribution<int> xDistribution;
-    std::uniform_int_distribution<int> yDistribution;
-
     bool checkBodyCollision();
     bool checkBorderCollision();
     void updateHead();

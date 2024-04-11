@@ -11,6 +11,7 @@ void setup()
     Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
     Heltec.display->clear();
     Serial.begin(115200);
+    randomSeed(analogRead(0));
 }
 
 void loop()

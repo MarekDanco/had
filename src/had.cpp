@@ -6,6 +6,7 @@
 #include "heltec.h"
 #include <set>
 #include <utility> // for std::pair
+#include <ctime>   // for std::time
 
 bool Had::checkBodyCollision()
 {
@@ -80,7 +81,7 @@ void Had::GameOver()
     }
 }
 
-Had::Had(int i) : width(i), gen(rd()), xDistribution(-DISPLAY_WIDTH / width, DISPLAY_WIDTH / width), yDistribution(-DISPLAY_HEIGHT / 4, DISPLAY_HEIGHT / 4)
+Had::Had(int i) : width(i)
 {
     direction = std::make_pair(-1, 0);
     for (int i = 0; i < 6; ++i)
@@ -159,11 +160,11 @@ bool Had::spawnedInBody()
 
 bool Had::spawnedOutside()
 {
-    if (food.first < 3 || food.first > DISPLAY_WIDTH - 3)
+    if (food.first < 3 || food.first + width > DISPLAY_WIDTH - 3)
     {
         return true;
     }
-    if (food.second < 1 || food.second > DISPLAY_HEIGHT - 1)
+    if (food.second < 1 || food.second + width > DISPLAY_HEIGHT - 1)
     {
         return true;
     }
@@ -172,13 +173,13 @@ bool Had::spawnedOutside()
 
 void Had::spawnFood()
 {
-    food.first = DISPLAY_WIDTH / 2 + xDistribution(gen) * width;
-    food.second = DISPLAY_HEIGHT / 2 - width / 2 + yDistribution(gen) * width;
+    food.first = DISPLAY_WIDTH / 2 + random(-DISPLAY_WIDTH / width, DISPLAY_WIDTH / width) * width;
+    food.second = DISPLAY_HEIGHT / 2 - width / 2 + random(-DISPLAY_HEIGHT / width, DISPLAY_HEIGHT / width) * width;
 
     while (spawnedInBody() || spawnedOutside())
     {
-        food.first = DISPLAY_WIDTH / 2 + xDistribution(gen);
-        food.second = DISPLAY_HEIGHT / 2 - width / 2 + yDistribution(gen);
+        food.first = DISPLAY_WIDTH / 2 + random(-DISPLAY_WIDTH / width, DISPLAY_WIDTH / width) * width;
+        food.second = DISPLAY_HEIGHT / 2 - width / 2 + random(-DISPLAY_HEIGHT / width, DISPLAY_HEIGHT / width) * width;
     }
 }
 
@@ -187,14 +188,13 @@ bool Had::drawBody()
     Heltec.display->clear();
     drawBorders();
 
-    Heltec.display->drawRect(food.first, food.second, width, width);
+    Heltec.display->drawRect(food.first, food.second, width, width); // draw food
 
     for (const auto &pair : body)
     {
         Heltec.display->drawRect(pair.first, pair.second, width, width);
     }
     Heltec.display->display();
-    // randomDirection();
     if (checkBodyCollision() || checkBorderCollision())
     {
         GameOver();
