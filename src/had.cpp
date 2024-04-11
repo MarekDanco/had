@@ -42,43 +42,6 @@ void Had::updateHead()
     tail = body.back();
 }
 
-void Had::randomDirection()
-{
-    int random_number = distribution(gen);
-    std::pair<int, int> old_dir = direction;
-    if (checkBodyCollision() or checkBorderCollision() or random_number == 5)
-    {
-        if (direction.first == 0)
-        {
-            direction.second = 0;
-            random_number = distribution(gen);
-            direction.first = (random_number > 3) ? 1 : -1;
-            if (checkBodyCollision() or checkBorderCollision())
-            {
-                direction.first *= -1;
-            }
-            if (checkBodyCollision() or checkBorderCollision())
-            {
-                direction = old_dir;
-            }
-        }
-        else
-        {
-            direction.first = 0;
-            random_number = distribution(gen);
-            direction.second = (random_number > 3) ? 1 : -1;
-            if (checkBodyCollision() or checkBorderCollision())
-            {
-                direction.second *= -1;
-            }
-            if (checkBodyCollision() or checkBorderCollision())
-            {
-                direction = old_dir;
-            }
-        }
-    }
-}
-
 void Had::drawBorders()
 {
     Heltec.display->drawLine(3, 0, DISPLAY_WIDTH - 3, 0);
@@ -117,7 +80,7 @@ void Had::GameOver()
     }
 }
 
-Had::Had(int i) : width(i), gen(rd()), distribution(0, 5)
+Had::Had(int i) : width(i)
 {
     direction = std::make_pair(-1, 0);
     for (int i = 0; i < 6; ++i)
@@ -126,6 +89,8 @@ Had::Had(int i) : width(i), gen(rd()), distribution(0, 5)
     }
     head = body.front();
     tail = body.back();
+    eaten = false;
+    spawnFood();
 };
 
 void Had::changeDirection(int key)
@@ -180,10 +145,27 @@ void Had::changeDirection(int key)
     }
 }
 
+bool Had::spawnedInBody()
+{
+}
+
+bool Had::spawnedOutside()
+{
+}
+
+void Had::spawnFood()
+{
+    int x_range = 128 / width;
+    int y_range = 96 / width;
+}
+
 bool Had::drawBody()
 {
     Heltec.display->clear();
     drawBorders();
+
+    Heltec.display->drawRect(food.first, food.second, width, width);
+
     for (const auto &pair : body)
     {
         Heltec.display->drawRect(pair.first, pair.second, width, width);
