@@ -5,8 +5,6 @@
 #include <random>
 #include "heltec.h"
 #include <set>
-#include <utility> // for std::pair
-#include <ctime>   // for std::time
 
 bool Had::checkBodyCollision()
 {
@@ -37,7 +35,10 @@ bool Had::checkBorderCollision()
 
 void Had::updateHead()
 {
-    body.pop_back();
+    if (!digest())
+    {
+        body.pop_back();
+    }
     body.push_front(std::make_pair(body.front().first + direction.first * width, body.front().second + direction.second * width));
     head = body.front();
     tail = body.back();
@@ -90,9 +91,31 @@ Had::Had(int i) : width(i)
     }
     head = body.front();
     tail = body.back();
-    eaten = false;
     spawnFood();
 };
+
+bool Had::drawBody()
+{
+    Heltec.display->clear();
+    drawBorders();
+
+    Heltec.display->drawRect(food.first, food.second, width, width); // draw food
+
+    for (const auto &pair : body)
+    {
+        Heltec.display->drawRect(pair.first, pair.second, width, width);
+    }
+    Heltec.display->display();
+    if (checkBodyCollision() || checkBorderCollision())
+    {
+        GameOver();
+        return true;
+    }
+
+    updateHead();
+    eat();
+    return false;
+}
 
 void Had::changeDirection(int key)
 {
@@ -183,23 +206,22 @@ void Had::spawnFood()
     }
 }
 
-bool Had::drawBody()
+void Had::eat()
 {
-    Heltec.display->clear();
-    drawBorders();
-
-    Heltec.display->drawRect(food.first, food.second, width, width); // draw food
-
-    for (const auto &pair : body)
+    if (food.first == head.first && food.second == head.second)
     {
-        Heltec.display->drawRect(pair.first, pair.second, width, width);
+        guts.push_back(food);
+        Heltec.display->clear();
+        spawnFood();
     }
-    Heltec.display->display();
-    if (checkBodyCollision() || checkBorderCollision())
+}
+
+bool Had::digest()
+{
+    if (guts.front().first == tail.first && guts.front().second == tail.second)
     {
-        GameOver();
+        guts.pop_front();
         return true;
     }
-    updateHead();
     return false;
 }

@@ -2,10 +2,6 @@
 #include "heltec.h"
 #include "had.h"
 
-Had had(4);
-int incomingByte = 0; // for incoming serial data
-bool over = false;
-
 void setup()
 {
     Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
@@ -14,7 +10,11 @@ void setup()
     randomSeed(analogRead(0));
 }
 
+Had had(4);
+int incomingByte = 0; // for incoming serial data
+bool over = false;
 void loop()
+
 {
     if (!over)
     {
@@ -32,6 +32,6 @@ void loop()
         {
             over = true;
         }
-        delay(500);
+        delay(300);
     }
 }

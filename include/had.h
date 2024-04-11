@@ -7,12 +7,12 @@ class Had
 {
 private:
     std::list<std::pair<int, int>> body;
+    std::list<std::pair<int, int>> guts;
     std::pair<int, int> direction;
     std::pair<int, int> head;
     std::pair<int, int> tail;
     std::pair<int, int> food;
     int width;
-    bool eaten;
 
     bool checkBodyCollision();
     bool checkBorderCollision();
@@ -22,11 +22,13 @@ private:
 
     bool spawnedInBody();
     bool spawnedOutside();
+    void spawnFood();
+    void eat();
+    bool digest();
 
 public:
     Had(int i);
 
     void changeDirection(int key);
-    void spawnFood();
     bool drawBody();
 };
