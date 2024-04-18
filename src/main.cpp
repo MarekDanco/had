@@ -37,5 +37,6 @@ void loop()
     else
     {
         had = Had(4);
+        over = false;
     }
 }
