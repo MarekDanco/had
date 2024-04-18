@@ -99,7 +99,7 @@ bool Had::drawBody()
     Heltec.display->clear();
     drawBorders();
 
-    Heltec.display->drawRect(food.first, food.second, width, width); // draw food
+    Heltec.display->fillRect(food.first, food.second, width, width); // fill food rectangle
 
     for (const auto &pair : body)
     {

@@ -13,8 +13,8 @@ void setup()
 Had had(4);
 int incomingByte = 0; // for incoming serial data
 bool over = false;
-void loop()
 
+void loop()
 {
     if (!over)
     {
@@ -33,5 +33,9 @@ void loop()
             over = true;
         }
         delay(300);
+    }
+    else
+    {
+        had = Had(4);
     }
 }
